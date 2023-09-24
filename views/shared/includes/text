@@ -1,0 +1,92 @@
+<%- include('../../shared/includes/head', {pageTitle: 'All Products' }) %>
+  </head>
+
+  <body>
+    <%- include('../../shared/includes/header') %>
+      <main>
+        <h1>All Products</h1>
+        <% for (const product of products) { %>
+          <li>
+
+          </li>
+          <% } %>
+      </main>
+      <%- include('../../shared/includes/footer') %>
+
+        <!-- Products Details -->
+        <div class="center">
+          <h1>All Products</h1>
+        </div>
+        <section>
+          <ul id="product-grid">
+            <% for (let i=0; i < products.length; i +=2) { %>
+              <div class="product-pair">
+                <%- include('../../shared/includes/product-item', { product: products[i] }) %>
+                  <% if (i + 1 < products.length) { %>
+                    <%- include('../../shared/includes/product-item', { product: products[i + 1] }) %>
+                      <% } %>
+              </div>
+              <% } %>
+          </ul>
+        </section>
+
+
+        <!-- JS -->
+        const cartItemUpdateFormElement = document.querySelectorAll('.cart-item-management');
+        const cartTotalPriceElement = document.getElementById('cart-total-price');
+        const cartBadge = document.querySelector('.nav-items .badge');
+
+        async function updateCartItem(event) {
+        event.preventDefault();
+
+        const form = event.target;
+
+        const productId = form.dataset.productid;
+        const csrfToken = form.dataset.csrf;
+        const quantity = form.firstElementChild.value;
+
+        let response;
+        try {
+        response = await fetch('/cart/items', {
+        method: 'PATCH',
+        body: JSON.stringify({
+        productId: productId,
+        quantity: quantity,
+        _csrf: csrfToken,
+        }),
+        headers: {
+        'Content-Type': 'application/json'
+        }
+        });
+
+        } catch (error) {
+        alert('Something went wrong!');
+        return;
+        }
+
+        if (!response.ok) {
+        alert('Something went wrong!');
+        return;
+        }
+
+        const responseData = await response.json();
+
+        console.log(responseData.updatedCartData)
+
+        if (responseData.updatedCartData.updateItemPrice === 0) {
+        form.parentElement.parentElement.remove();
+        } else {
+        const cartItemTotalPriceElement = form.parentElement.querySelector('.cart-item-price');
+        console.log('cartItem Total Price Element:', cartItemTotalPriceElement)
+
+        cartItemTotalPriceElement.textContent = responseData.updatedCartData.updateItemPrice;
+
+        cartTotalPriceElement.textContent = responseData.updatedCartData.newTotalPrice;
+
+        cartBadge.textContent = responseData.updatedCartData.newTotalQuantity
+        }
+        }
+
+        for (const formElement of cartItemUpdateFormElement) {
+        formElement.addEventListener('submit', updateCartItem);
+        }

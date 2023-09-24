@@ -1,0 +1,19 @@
+ol li:first-child {
+  margin-top: 7rem;
+}
+
+address {
+  margin-left: 2rem;
+}
+
+img {
+  margin-bottom: 1rem;
+}
+
+form {
+  text-align: center;
+}
+
+button {
+  margin-left: 1rem;
+}

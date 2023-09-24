@@ -1,0 +1,31 @@
+h1 {
+  margin: 0;
+  padding-top: 1.5rem;
+  text-align: center;
+  color: var(--color-gray-300);
+}
+
+form {
+  max-width: 40rem;
+  margin: var(--space-8) auto;
+  padding: var(--space-4);
+  background: linear-gradient(55deg, rgb(71, 97, 214), rgb(178, 211, 210));
+  border-radius: var(--border-radius-large);
+  text-align: center;
+}
+
+form a {
+  color: var(--color-natures-link);
+  margin: 10px;
+}
+
+form a:hover,
+form a:active {
+  color: var(--color-gray-700);
+}
+
+@media (min-width: 48rem) {
+  h1 {
+    padding-top: 5rem;
+  }
+}
